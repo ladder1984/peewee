@@ -23,12 +23,17 @@ try:
     from playhouse.postgres_ext import PostgresqlExtDatabase
 except ImportError:
     PostgresqlExtDatabase = None
+from playhouse.shortcuts import RetryOperationalError
+
+class MySQLDatabaseRetry(RetryOperationalError, MySQLDatabase):
+    pass
 
 
 schemes = {
     'apsw': APSWDatabase,
     'berkeleydb': BerkeleyDatabase,
     'mysql': MySQLDatabase,
+    'mysql+retry': MySQLDatabaseRetry,
     'mysql+pool': PooledMySQLDatabase,
     'postgres': PostgresqlDatabase,
     'postgresql': PostgresqlDatabase,
